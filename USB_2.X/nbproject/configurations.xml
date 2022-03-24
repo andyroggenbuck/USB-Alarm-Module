@@ -30,6 +30,9 @@
             <logicalFolder name="f4" displayName="clock" projectFiles="true">
               <itemPath>../src/config/Trinket_USB_2/peripheral/clock/plib_clock.h</itemPath>
             </logicalFolder>
+            <logicalFolder name="f6" displayName="dac" projectFiles="true">
+              <itemPath>../src/config/Trinket_USB_2/peripheral/dac/plib_dac.h</itemPath>
+            </logicalFolder>
             <logicalFolder name="f2" displayName="evsys" projectFiles="true">
               <itemPath>../src/config/Trinket_USB_2/peripheral/evsys/plib_evsys.h</itemPath>
             </logicalFolder>
@@ -42,6 +45,10 @@
             <logicalFolder name="f3" displayName="port" projectFiles="true">
               <itemPath>../src/config/Trinket_USB_2/peripheral/port/plib_port.h</itemPath>
             </logicalFolder>
+            <logicalFolder name="f7" displayName="tc" projectFiles="true">
+              <itemPath>../src/config/Trinket_USB_2/peripheral/tc/plib_tc_common.h</itemPath>
+              <itemPath>../src/config/Trinket_USB_2/peripheral/tc/plib_tc3.h</itemPath>
+            </logicalFolder>
           </logicalFolder>
           <logicalFolder name="f4" displayName="system" projectFiles="true">
             <logicalFolder name="f2" displayName="debug" projectFiles="true">
@@ -50,6 +57,11 @@
             <logicalFolder name="f1" displayName="int" projectFiles="true">
               <itemPath>../src/config/Trinket_USB_2/system/int/sys_int.h</itemPath>
               <itemPath>../src/config/Trinket_USB_2/system/int/sys_int_mapping.h</itemPath>
+            </logicalFolder>
+            <logicalFolder name="f3" displayName="time" projectFiles="true">
+              <itemPath>../src/config/Trinket_USB_2/system/time/sys_time.h</itemPath>
+              <itemPath>../src/config/Trinket_USB_2/system/time/sys_time_definitions.h</itemPath>
+              <itemPath>../src/config/Trinket_USB_2/system/time/src/sys_time_local.h</itemPath>
             </logicalFolder>
             <itemPath>../src/config/Trinket_USB_2/system/system.h</itemPath>
             <itemPath>../src/config/Trinket_USB_2/system/system_common.h</itemPath>
@@ -203,6 +215,9 @@
             <logicalFolder name="f4" displayName="clock" projectFiles="true">
               <itemPath>../src/config/Trinket_USB_2/peripheral/clock/plib_clock.c</itemPath>
             </logicalFolder>
+            <logicalFolder name="f6" displayName="dac" projectFiles="true">
+              <itemPath>../src/config/Trinket_USB_2/peripheral/dac/plib_dac.c</itemPath>
+            </logicalFolder>
             <logicalFolder name="f2" displayName="evsys" projectFiles="true">
               <itemPath>../src/config/Trinket_USB_2/peripheral/evsys/plib_evsys.c</itemPath>
             </logicalFolder>
@@ -215,6 +230,9 @@
             <logicalFolder name="f3" displayName="port" projectFiles="true">
               <itemPath>../src/config/Trinket_USB_2/peripheral/port/plib_port.c</itemPath>
             </logicalFolder>
+            <logicalFolder name="f7" displayName="tc" projectFiles="true">
+              <itemPath>../src/config/Trinket_USB_2/peripheral/tc/plib_tc3.c</itemPath>
+            </logicalFolder>
           </logicalFolder>
           <logicalFolder name="f2" displayName="stdio" projectFiles="true">
             <itemPath>../src/config/Trinket_USB_2/stdio/xc32_monitor.c</itemPath>
@@ -222,6 +240,9 @@
           <logicalFolder name="f5" displayName="system" projectFiles="true">
             <logicalFolder name="f1" displayName="int" projectFiles="true">
               <itemPath>../src/config/Trinket_USB_2/system/int/src/sys_int.c</itemPath>
+            </logicalFolder>
+            <logicalFolder name="f2" displayName="time" projectFiles="true">
+              <itemPath>../src/config/Trinket_USB_2/system/time/src/sys_time.c</itemPath>
             </logicalFolder>
           </logicalFolder>
           <logicalFolder name="f4" displayName="usb" projectFiles="true">
@@ -249,6 +270,7 @@
       <logicalFolder name="f1" displayName="Trinket_USB_2.mhc" projectFiles="true">
         <itemPath>../src/config/Trinket_USB_2/Trinket_USB_2.mhc/cmsis.yml</itemPath>
         <itemPath>../src/config/Trinket_USB_2/Trinket_USB_2.mhc/core.yml</itemPath>
+        <itemPath>../src/config/Trinket_USB_2/Trinket_USB_2.mhc/dac.yml</itemPath>
         <itemPath>../src/config/Trinket_USB_2/Trinket_USB_2.mhc/dfp.yml</itemPath>
         <itemPath>../src/config/Trinket_USB_2/Trinket_USB_2.mhc/drv_usbfs_v1.yml</itemPath>
         <itemPath>../src/config/Trinket_USB_2/Trinket_USB_2.mhc/evsys.yml</itemPath>
@@ -257,6 +279,8 @@
         <itemPath>../src/config/Trinket_USB_2/Trinket_USB_2.mhc/nvmctrl.yml</itemPath>
         <itemPath>../src/config/Trinket_USB_2/Trinket_USB_2.mhc/project.yml</itemPath>
         <itemPath>../src/config/Trinket_USB_2/Trinket_USB_2.mhc/settings.yml</itemPath>
+        <itemPath>../src/config/Trinket_USB_2/Trinket_USB_2.mhc/sys_time.yml</itemPath>
+        <itemPath>../src/config/Trinket_USB_2/Trinket_USB_2.mhc/tc3.yml</itemPath>
         <itemPath>../src/config/Trinket_USB_2/Trinket_USB_2.mhc/usb_device.yml</itemPath>
         <itemPath>../src/config/Trinket_USB_2/Trinket_USB_2.mhc/usb_device_cdc.yml</itemPath>
       </logicalFolder>
@@ -276,7 +300,7 @@
         <targetDevice>ATSAMD21E18A</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>jlink</platformTool>
+        <platformTool>snap</platformTool>
         <languageToolchain>XC32</languageToolchain>
         <languageToolchainVersion>4.00</languageToolchainVersion>
         <platform>3</platform>

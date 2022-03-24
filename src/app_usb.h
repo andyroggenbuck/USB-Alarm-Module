@@ -76,12 +76,9 @@ typedef enum
     /* A character is received from host */
     APP_USB_STATE_WAIT_FOR_READ_COMPLETE,
 
-    /* Wait for the TX to get completed */
-    APP_USB_STATE_SCHEDULE_WRITE,
-
-    /* Wait for the write to complete */
-    APP_USB_STATE_WAIT_FOR_WRITE_COMPLETE,
-
+    /* Play alarm if correct character received */
+    APP_USB_STATE_PLAY_ALARM,
+            
     /* Application Error state*/
     APP_USB_STATE_ERROR
 } APP_USB_STATES;

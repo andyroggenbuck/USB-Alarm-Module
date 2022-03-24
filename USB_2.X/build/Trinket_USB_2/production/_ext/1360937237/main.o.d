@@ -1,8 +1,7 @@
 build/Trinket_USB_2/production/_ext/1360937237/main.o: ../src/main.c \
  ../src/config/Trinket_USB_2/definitions.h \
- ../src/config/Trinket_USB_2/usb/usb_device_cdc.h \
- ../src/config/Trinket_USB_2/configuration.h \
- ../src/config/Trinket_USB_2/user.h ../src/config/Trinket_USB_2/device.h \
+ ../src/config/Trinket_USB_2/peripheral/nvmctrl/plib_nvmctrl.h \
+ ../src/config/Trinket_USB_2/device.h \
  ../src/packs/ATSAMD21E18A_DFP/samd21e18a.h \
  ../src/packs/CMSIS/CMSIS/Core/Include/core_cm0plus.h \
  ../src/packs/CMSIS/CMSIS/Core/Include/cmsis_version.h \
@@ -65,36 +64,43 @@ build/Trinket_USB_2/production/_ext/1360937237/main.o: ../src/main.c \
  ../src/packs/ATSAMD21E18A_DFP/instance/wdt.h \
  ../src/packs/ATSAMD21E18A_DFP/pio/samd21e18a.h \
  ../src/config/Trinket_USB_2/device_cache.h \
+ ../src/config/Trinket_USB_2/device.h \
  ../src/config/Trinket_USB_2/toolchain_specifics.h \
  ../src/packs/CMSIS/CMSIS/Core/Include/cmsis_compiler.h \
- ../src/config/Trinket_USB_2/usb/usb_common.h \
+ ../src/config/Trinket_USB_2/peripheral/evsys/plib_evsys.h \
+ ../src/config/Trinket_USB_2/peripheral/port/plib_port.h \
+ ../src/config/Trinket_USB_2/peripheral/clock/plib_clock.h \
+ ../src/config/Trinket_USB_2/peripheral/nvic/plib_nvic.h \
  ../src/config/Trinket_USB_2/usb/usb_chapter_9.h \
  ../src/config/Trinket_USB_2/usb/usb_device.h \
+ ../src/config/Trinket_USB_2/configuration.h \
+ ../src/config/Trinket_USB_2/user.h \
  ../src/config/Trinket_USB_2/system/system.h \
  ../src/config/Trinket_USB_2/system/system_common.h \
  ../src/config/Trinket_USB_2/system/system_module.h \
  ../src/config/Trinket_USB_2/system/system_common.h \
  ../src/config/Trinket_USB_2/driver/driver_common.h \
+ ../src/config/Trinket_USB_2/usb/usb_common.h \
+ ../src/config/Trinket_USB_2/usb/usb_chapter_9.h \
  ../src/config/Trinket_USB_2/driver/usb/drv_usb.h \
  ../src/config/Trinket_USB_2/system/int/sys_int.h \
- ../src/config/Trinket_USB_2/device.h \
  ../src/config/Trinket_USB_2/system/int/sys_int_mapping.h \
  ../src/config/Trinket_USB_2/usb/usb_host_client_driver.h \
  ../src/config/Trinket_USB_2/usb/usb_host.h \
  ../src/config/Trinket_USB_2/usb/usb_host_hub_interface.h \
  ../src/config/Trinket_USB_2/usb/src/usb_device_mapping.h \
+ ../src/config/Trinket_USB_2/peripheral/tc/plib_tc3.h \
+ ../src/config/Trinket_USB_2/peripheral/tc/plib_tc_common.h \
+ ../src/config/Trinket_USB_2/peripheral/dac/plib_dac.h \
+ ../src/config/Trinket_USB_2/system/time/sys_time.h \
+ ../src/config/Trinket_USB_2/system/time/sys_time_definitions.h \
+ ../src/config/Trinket_USB_2/usb/usb_device_cdc.h \
+ ../src/config/Trinket_USB_2/usb/usb_device.h \
  ../src/config/Trinket_USB_2/usb/src/usb_device_function_driver.h \
  ../src/config/Trinket_USB_2/usb/usb_cdc.h \
  ../src/config/Trinket_USB_2/usb/usb_cdc.h \
- ../src/config/Trinket_USB_2/peripheral/nvmctrl/plib_nvmctrl.h \
- ../src/config/Trinket_USB_2/peripheral/evsys/plib_evsys.h \
- ../src/config/Trinket_USB_2/peripheral/port/plib_port.h \
- ../src/config/Trinket_USB_2/peripheral/clock/plib_clock.h \
- ../src/config/Trinket_USB_2/peripheral/nvic/plib_nvic.h \
  ../src/config/Trinket_USB_2/driver/usb/usbfsv1/drv_usbfsv1.h \
  ../src/config/Trinket_USB_2/usb/usb_hub.h \
- ../src/config/Trinket_USB_2/usb/usb_chapter_9.h \
- ../src/config/Trinket_USB_2/usb/usb_device.h \
  ../src/config/Trinket_USB_2/system/int/sys_int.h \
  ../src/config/Trinket_USB_2/osal/osal.h \
  ../src/config/Trinket_USB_2/osal/osal_definitions.h \
@@ -103,11 +109,7 @@ build/Trinket_USB_2/production/_ext/1360937237/main.o: ../src/main.c \
 
 ../src/config/Trinket_USB_2/definitions.h:
 
-../src/config/Trinket_USB_2/usb/usb_device_cdc.h:
-
-../src/config/Trinket_USB_2/configuration.h:
-
-../src/config/Trinket_USB_2/user.h:
+../src/config/Trinket_USB_2/peripheral/nvmctrl/plib_nvmctrl.h:
 
 ../src/config/Trinket_USB_2/device.h:
 
@@ -235,15 +237,27 @@ build/Trinket_USB_2/production/_ext/1360937237/main.o: ../src/main.c \
 
 ../src/config/Trinket_USB_2/device_cache.h:
 
+../src/config/Trinket_USB_2/device.h:
+
 ../src/config/Trinket_USB_2/toolchain_specifics.h:
 
 ../src/packs/CMSIS/CMSIS/Core/Include/cmsis_compiler.h:
 
-../src/config/Trinket_USB_2/usb/usb_common.h:
+../src/config/Trinket_USB_2/peripheral/evsys/plib_evsys.h:
+
+../src/config/Trinket_USB_2/peripheral/port/plib_port.h:
+
+../src/config/Trinket_USB_2/peripheral/clock/plib_clock.h:
+
+../src/config/Trinket_USB_2/peripheral/nvic/plib_nvic.h:
 
 ../src/config/Trinket_USB_2/usb/usb_chapter_9.h:
 
 ../src/config/Trinket_USB_2/usb/usb_device.h:
+
+../src/config/Trinket_USB_2/configuration.h:
+
+../src/config/Trinket_USB_2/user.h:
 
 ../src/config/Trinket_USB_2/system/system.h:
 
@@ -255,11 +269,13 @@ build/Trinket_USB_2/production/_ext/1360937237/main.o: ../src/main.c \
 
 ../src/config/Trinket_USB_2/driver/driver_common.h:
 
+../src/config/Trinket_USB_2/usb/usb_common.h:
+
+../src/config/Trinket_USB_2/usb/usb_chapter_9.h:
+
 ../src/config/Trinket_USB_2/driver/usb/drv_usb.h:
 
 ../src/config/Trinket_USB_2/system/int/sys_int.h:
-
-../src/config/Trinket_USB_2/device.h:
 
 ../src/config/Trinket_USB_2/system/int/sys_int_mapping.h:
 
@@ -271,29 +287,29 @@ build/Trinket_USB_2/production/_ext/1360937237/main.o: ../src/main.c \
 
 ../src/config/Trinket_USB_2/usb/src/usb_device_mapping.h:
 
+../src/config/Trinket_USB_2/peripheral/tc/plib_tc3.h:
+
+../src/config/Trinket_USB_2/peripheral/tc/plib_tc_common.h:
+
+../src/config/Trinket_USB_2/peripheral/dac/plib_dac.h:
+
+../src/config/Trinket_USB_2/system/time/sys_time.h:
+
+../src/config/Trinket_USB_2/system/time/sys_time_definitions.h:
+
+../src/config/Trinket_USB_2/usb/usb_device_cdc.h:
+
+../src/config/Trinket_USB_2/usb/usb_device.h:
+
 ../src/config/Trinket_USB_2/usb/src/usb_device_function_driver.h:
 
 ../src/config/Trinket_USB_2/usb/usb_cdc.h:
 
 ../src/config/Trinket_USB_2/usb/usb_cdc.h:
 
-../src/config/Trinket_USB_2/peripheral/nvmctrl/plib_nvmctrl.h:
-
-../src/config/Trinket_USB_2/peripheral/evsys/plib_evsys.h:
-
-../src/config/Trinket_USB_2/peripheral/port/plib_port.h:
-
-../src/config/Trinket_USB_2/peripheral/clock/plib_clock.h:
-
-../src/config/Trinket_USB_2/peripheral/nvic/plib_nvic.h:
-
 ../src/config/Trinket_USB_2/driver/usb/usbfsv1/drv_usbfsv1.h:
 
 ../src/config/Trinket_USB_2/usb/usb_hub.h:
-
-../src/config/Trinket_USB_2/usb/usb_chapter_9.h:
-
-../src/config/Trinket_USB_2/usb/usb_device.h:
 
 ../src/config/Trinket_USB_2/system/int/sys_int.h:
 

@@ -39,6 +39,9 @@
 uint8_t CACHE_ALIGN cdcReadBuffer[APP_USB_READ_BUFFER_SIZE];
 uint8_t CACHE_ALIGN cdcWriteBuffer[APP_USB_WRITE_BUFFER_SIZE];
 
+/* number of samples for waveform generation */
+#define NUM_OF_SAMPLES (100)
+
 // *****************************************************************************
 /* Application Data
 
@@ -55,6 +58,47 @@ uint8_t CACHE_ALIGN cdcWriteBuffer[APP_USB_WRITE_BUFFER_SIZE];
 */
 
 APP_USB_DATA app_usbData;
+
+/* index variable for waveform lookup table */
+volatile uint8_t sample_number = 0;
+
+/* lookup table of DAC values for sawtooth wave */
+const uint16_t triangle_wave[NUM_OF_SAMPLES] = {
+0x100,	0x105,	0x10A,	0x10F,	0x115,	0x11A,	0x11F,	0x124,	0x129,	0x12E,
+0x133,	0x138,	0x13E,	0x143,	0x148,	0x14D,	0x152,	0x157,	0x15C,	0x161,
+0x167,	0x16C,	0x171,	0x176,	0x17B,	0x180,	0x185,	0x18A,	0x18F,	0x195,
+0x19A,	0x19F,	0x1A4,	0x1A9,	0x1AE,	0x1B3,	0x1B8,	0x1BE,	0x1C3,	0x1C8,
+0x1CD,	0x1D2,	0x1D7,	0x1DC,	0x1E1,	0x1E7,	0x1EC,	0x1F1,	0x1F6,	0x1FB,
+0x200,	0x205,	0x20A,	0x20F,	0x215,	0x21A,	0x21F,	0x224,	0x229,	0x22E,
+0x233,	0x238,	0x23E,	0x243,	0x248,	0x24D,	0x252,	0x257,	0x25C,	0x261,
+0x267,	0x26C,	0x271,	0x276,	0x27B,	0x280,	0x285,	0x28A,	0x28F,	0x295,
+0x29A,	0x29F,	0x2A4,	0x2A9,	0x2AE,	0x2B3,	0x2B8,	0x2BE,	0x2C3,	0x2C8,
+0x2CD,	0x2D2,	0x2D7,	0x2DC,	0x2E1,	0x2E7,	0x2EC,	0x2F1,	0x2F6,	0x2FB,
+};
+
+/* timer handle for alarm delay */
+SYS_TIME_HANDLE timer = SYS_TIME_HANDLE_INVALID;
+
+/* millisecond delay */
+/*
+void delay_ms( int ms )
+{
+    if (SYS_TIME_DelayMS(ms, &timer) != SYS_TIME_SUCCESS)
+    {
+        // Handle error
+    }
+    else if(SYS_TIME_DelayIsComplete(timer) != true)
+    {
+        // Wait till the delay has not expired
+        while (SYS_TIME_DelayIsComplete(timer) == false);
+    }
+}
+ */
+
+/* loop variable */
+int i;
+
+volatile int j;
 
 // *****************************************************************************
 // *****************************************************************************
@@ -276,6 +320,21 @@ void APP_USB_USBDeviceEventHandler
     }
 }
 
+/*******************************************************************************
+ * Timer interrupt event handler for waveform generation
+ ******************************************************************************/
+void TC3_CallBack_Function (TC_TIMER_STATUS status, uintptr_t context)
+{ 
+    DAC_DataWrite (triangle_wave[sample_number]);
+
+    sample_number++;
+
+    if (sample_number >= 100)
+    {
+       sample_number = 0;
+    }
+}
+
 // *****************************************************************************
 // *****************************************************************************
 // Section: Application Local Functions
@@ -388,7 +447,11 @@ void APP_USB_Tasks ( void )
     {
         /* Application's initial state. */
         case APP_USB_STATE_INIT:
-
+            
+            /* register timer interrupt callback function for waveform generation */
+            TC3_TimerStop();
+            TC3_TimerCallbackRegister(TC3_CallBack_Function, (uintptr_t)NULL);
+            
             /* Open the device layer */
             app_usbData.deviceHandle = USB_DEVICE_Open(USB_DEVICE_INDEX_0,
                 DRV_IO_INTENT_READWRITE);
@@ -469,13 +532,13 @@ void APP_USB_Tasks ( void )
              */
             if(app_usbData.isReadComplete)
             {
-                app_usbData.state = APP_USB_STATE_SCHEDULE_WRITE;
+                app_usbData.state = APP_USB_STATE_PLAY_ALARM;
             }
 
             break;
 
 
-        case APP_USB_STATE_SCHEDULE_WRITE:
+        case APP_USB_STATE_PLAY_ALARM:
 
             if(APP_USB_StateReset())
             {
@@ -486,95 +549,20 @@ void APP_USB_Tasks ( void )
              * data matches a command and then process it.
              * Only the first character is considered.
              */
-            switch (app_usbData.cdcReadBuffer[0])
+            if ( app_usbData.cdcReadBuffer[0] == 'A' )
             {
-                /* h,H - Menu Command */
-                case 'h':
-                case 'H':
-                    app_usbData.isCommand = true;
-                    app_usbData.numBytesWrite =
-                            sprintf((char*)app_usbData.cdcWriteBuffer,
-                            "Getting Started Menu:\r\n"
-                            "1 - Toggle board LED\r\n"
-                            "2 - Read switch state\r\n"
-                            "h - Show this menu\r\n");
-                    
-                    break;
-                
-                /* 1 - Led Toggle Command */
-                case '1':
-                    app_usbData.isCommand = true;
-                    app_usbData.numBytesWrite =
-                        sprintf((char*)app_usbData.cdcWriteBuffer,
-                            "Toggled LED State\r\n");
-                    
-                    LED_Toggle();
-                    
-                    
-                    break;
-                
-                /* 2 - Read Switch State */
-                case '2':
-                    app_usbData.isCommand = true;
-                    if ( BUTTON_Get() )
-                    {
-                        app_usbData.numBytesWrite = 
-                            sprintf((char*)app_usbData.cdcWriteBuffer,
-                            "The switch is pressed\r\n");
-                    }
-                    else
-                        app_usbData.numBytesWrite = 
-                            sprintf((char*)app_usbData.cdcWriteBuffer,
-                            "The switch is not pressed\r\n");
-                    
-                    break;
-                               
-                /* Do nothing */
-                default:
-                    /* Clear command flag */
-                    app_usbData.isCommand = false;
-                    
-                    break;
+                for ( i = 0; i < 9; i++ )
+                {
+                    TC3_TimerStart();
+                    j = 0xFFFFF;
+                    while( j-- > 0 );
+                    TC3_TimerStop();
+                    j = 0xFFFFF;
+                    while( j-- > 0 );
+                }
             }
             
-            /* Schedule write only if a valid command was processed */
-            if(app_usbData.isCommand)
-            {
-                app_usbData.isWriteComplete = false;
-                app_usbData.writeTransferHandle =
-                        USB_DEVICE_CDC_TRANSFER_HANDLE_INVALID;
-                
-                /* Schedule write */
-                USB_DEVICE_CDC_Write(USB_DEVICE_CDC_INDEX_0,
-                    &app_usbData.writeTransferHandle,
-                    app_usbData.cdcWriteBuffer,
-                    app_usbData.numBytesWrite,
-                    USB_DEVICE_CDC_TRANSFER_FLAGS_DATA_COMPLETE);
-                
-                app_usbData.state = APP_USB_STATE_WAIT_FOR_WRITE_COMPLETE;
-            }
-            else
-            {
-                app_usbData.state = APP_USB_STATE_SCHEDULE_READ;
-            }
-
-            break;
-
-        case APP_USB_STATE_WAIT_FOR_WRITE_COMPLETE:
-
-            if(APP_USB_StateReset())
-            {
-                break;
-            }
-
-            /* Check if a character was sent. The isWriteComplete
-             * flag gets updated in the CDC event handler 
-             */
-
-            if(app_usbData.isWriteComplete == true)
-            {
-                app_usbData.state = APP_USB_STATE_SCHEDULE_READ;
-            }
+            app_usbData.state = APP_USB_STATE_SCHEDULE_READ;
 
             break;
 
