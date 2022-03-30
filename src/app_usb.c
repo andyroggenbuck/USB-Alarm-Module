@@ -532,11 +532,74 @@ void APP_USB_Tasks ( void )
              */
             if(app_usbData.isReadComplete)
             {
-                app_usbData.state = APP_USB_STATE_PLAY_ALARM;
+                /* if ID request received */
+                if (app_usbData.cdcReadBuffer[0] == 't')
+                {
+                    /* respond to ID request with a 2 - Alarm Module */
+                    app_usbData.numBytesWrite = sprintf(
+                                (char*)app_usbData.cdcWriteBuffer,
+                                "2\r\n");
+                    app_usbData.state = APP_USB_STATE_SCHEDULE_WRITE;
+                    break;
+                }
+                /* if alarm command received */
+                else if (app_usbData.cdcReadBuffer[0] == 'A')
+                {
+                    /* play alarm */
+                    app_usbData.state = APP_USB_STATE_PLAY_ALARM;
+                    break;
+                }
+                /* if non-command character received */
+                else
+                {
+                    /* schedule another read */
+                    app_usbData.state = APP_USB_STATE_SCHEDULE_READ;
+                }
             }
 
             break;
+            
+        case APP_USB_STATE_SCHEDULE_WRITE:
 
+            if(APP_USB_StateReset())
+            {
+                break;
+            }
+            
+            /* Schedule write */
+            app_usbData.isWriteComplete = false;
+            app_usbData.writeTransferHandle =
+                    USB_DEVICE_CDC_TRANSFER_HANDLE_INVALID;
+
+            /* Schedule write */
+            USB_DEVICE_CDC_Write(USB_DEVICE_CDC_INDEX_0,
+                &app_usbData.writeTransferHandle,
+                app_usbData.cdcWriteBuffer,
+                app_usbData.numBytesWrite,
+                USB_DEVICE_CDC_TRANSFER_FLAGS_DATA_COMPLETE);
+
+            app_usbData.state = APP_USB_STATE_WAIT_FOR_WRITE_COMPLETE;
+            
+            break;
+            
+        case APP_USB_STATE_WAIT_FOR_WRITE_COMPLETE:
+
+            if(APP_USB_StateReset())
+            {
+                break;
+            }
+
+            /* Check if a character was sent. The isWriteComplete
+             * flag gets updated in the CDC event handler 
+             */
+
+            if(app_usbData.isWriteComplete == true)
+            {
+                /* schedule another read */
+                app_usbData.state = APP_USB_STATE_SCHEDULE_READ;
+            }
+
+            break;
 
         case APP_USB_STATE_PLAY_ALARM:
 
@@ -551,7 +614,7 @@ void APP_USB_Tasks ( void )
              */
             if ( app_usbData.cdcReadBuffer[0] == 'A' )
             {
-                for ( i = 0; i < 9; i++ )
+                for ( i = 0; i < 7; i++ )
                 {
                     TC3_TimerStart();
                     j = 0xFFFFF;
