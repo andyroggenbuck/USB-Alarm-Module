@@ -61,6 +61,7 @@ APP_USB_DATA app_usbData;
 
 /* index variable for waveform lookup table */
 volatile uint8_t sample_number = 0;
+volatile bool tone_on = false;
 
 /* lookup table of DAC values for sawtooth wave */
 const uint16_t triangle_wave[NUM_OF_SAMPLES] = {
@@ -325,8 +326,17 @@ void APP_USB_USBDeviceEventHandler
  ******************************************************************************/
 void TC3_CallBack_Function (TC_TIMER_STATUS status, uintptr_t context)
 { 
-    DAC_DataWrite (triangle_wave[sample_number]);
-
+    if (tone_on)
+    {
+        /* write next sample if tone on */
+        DAC_DataWrite (triangle_wave[sample_number]);
+    }
+    else
+    {
+        /* write "middle value" from sawtooth if tone off */
+        DAC_DataWrite( 0x1FD );
+    }
+    
     sample_number++;
 
     if (sample_number >= 100)
@@ -449,7 +459,6 @@ void APP_USB_Tasks ( void )
         case APP_USB_STATE_INIT:
             
             /* register timer interrupt callback function for waveform generation */
-            TC3_TimerStop();
             TC3_TimerCallbackRegister(TC3_CallBack_Function, (uintptr_t)NULL);
             
             /* Open the device layer */
@@ -535,10 +544,10 @@ void APP_USB_Tasks ( void )
                 /* if ID request received */
                 if (app_usbData.cdcReadBuffer[0] == 't')
                 {
-                    /* respond to ID request with a 2 - Alarm Module */
+                    /* respond to ID request with a %2 - Alarm Module */
                     app_usbData.numBytesWrite = sprintf(
                                 (char*)app_usbData.cdcWriteBuffer,
-                                "2\r\n");
+                                "$2\r\n");
                     app_usbData.state = APP_USB_STATE_SCHEDULE_WRITE;
                     break;
                 }
@@ -616,10 +625,10 @@ void APP_USB_Tasks ( void )
             {
                 for ( i = 0; i < 7; i++ )
                 {
-                    TC3_TimerStart();
+                    tone_on = true;
                     j = 0xFFFFF;
                     while( j-- > 0 );
-                    TC3_TimerStop();
+                    tone_on = false;
                     j = 0xFFFFF;
                     while( j-- > 0 );
                 }
